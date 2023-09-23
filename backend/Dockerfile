@@ -8,10 +8,11 @@ WORKDIR /app
 ADD . /app
 
 # Install requirements
-RUN pip install -r requirements.txt
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir fastapi python-multipart uvicorn "python-jose[cryptography]"  "passlib[bcrypt]" 
+
+RUN pip install -r requirements.txt
 
 # Make port 5000 available to the world outside this container
 EXPOSE 8000
