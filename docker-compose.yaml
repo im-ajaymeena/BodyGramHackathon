@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+  frontend:
+    networks:
+    - default
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "5173:5173"
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules/
+    environment:
+      - VITE_APP_BACKEND_URL=http://localhost:8100
+    restart: always
+
+  web:
+    build:
+      context: ./backend
+    ports:
+      - "8100:8000"
+    environment:
+      - "GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}"
+      - VUE_APP_URL=${VUE_APP_URL:-http://localhost:5173}
+      - ROOT_PATH=${ROOT_PATH:-}
+    volumes:
+      - ./backend:/app
+
+networks:
+  default:
+    name: network1
+  
+  
