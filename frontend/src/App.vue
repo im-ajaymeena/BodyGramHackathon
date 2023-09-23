@@ -4,6 +4,7 @@ import axios from 'axios'
 import ResultCard from './components/ResultCard.vue'
 import { SearchResult } from './api/api'
 import SubmitForm from './components/SubmitForm.vue';
+import ResultChart from './components/ResultChart.vue';
 
 
 const backendUrl = import.meta.env.VITE_APP_BACKEND_URL as string
@@ -198,6 +199,8 @@ onMounted(() => {
     </div>
 
     <SubmitForm />
+    <ResultChart />
+
   </div>
 </template>
 

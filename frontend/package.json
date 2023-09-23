@@ -10,6 +10,7 @@
     "generate-api": "../generate-openapi-client.sh"
   },
   "dependencies": {
+    "chart.js": "^4.4.0",
     "daisyui": "^2.51.6",
     "vue": "^3.2.47"
   },
