@@ -46,24 +46,6 @@ onMounted(() => {
     'mesomorphy': 1.344,
     'endomorphy': 4.6
   }
-  // const volleyball =
-  // {
-  //   'Ectomorphy': 3.4,
-  //   'Mesomorphy': 2.7,
-  //   'Endomorphy': 2.9
-  // }
-  // const basketball =
-  // {
-  //   'Ectomorphy': 3.7,
-  //   'Mesomorphy': 2.7,
-  //   'Endomorphy': 2.0
-  // }
-  // const handball =
-  // {
-  //   'Ectomorphy': 4.2,
-  //   'Mesomorphy': 4.7,
-  //   'Endomorphy': 1.8
-  // }
 
   function plotResult(result: Array) {
     const x = result['ectomorphy'] - result['endomorphy']
