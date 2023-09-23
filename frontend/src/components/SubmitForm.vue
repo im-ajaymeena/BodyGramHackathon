@@ -32,21 +32,21 @@
     <div class="grid grid-cols-3">
       <div class="input-wrapper">
         <label for="height">Triceps: </label>
-        <input name='height' id="height" type="number" v-model="formData.height">
+        <input name='height' id="height" type="number" v-model="formData.tricepsSF">
       </div>
       <div class="input-wrapper px-4">
         <label for="weight">Subscapular: </label>
-        <input name='weight' id="weight" type="number" v-model="formData.weight">
+        <input name='weight' id="weight" type="number" v-model="formData.subscapularSF">
       </div>
     </div>
     <div class="grid grid-cols-3">
       <div class="input-wrapper">
         <label for="height">Supraspinale: </label>
-        <input name='height' id="height" type="number" v-model="formData.height">
+        <input name='height' id="height" type="number" v-model="formData.supraspinaleSF">
       </div>
       <div class="input-wrapper px-4">
         <label for="weight">Calf?: </label>
-        <input name='weight' id="weight" type="number" v-model="formData.weight">
+        <input name='weight' id="weight" type="number" v-model="formData.calfSF">
       </div>
     </div>
     <div class="grid grid-cols-2">
@@ -74,6 +74,10 @@ const formData = ref({
   weight: 0,
   age: 0,
   gender: '',
+  tricepsSF: 0,
+  subscapularSF: 0,
+  supraspinaleSF: 0,
+  calfSF: 0
 })
 
 const frontImage = ref<File | null>(null)
@@ -97,7 +101,11 @@ function createScan() {
       height: formData.value.height * 10,
       weight: formData.value.weight * 1000,
       age: formData.value.age,
-      gender: formData.value.gender
+      gender: formData.value.gender,
+      tricepsSF: formData.value.tricepsSF,
+      subscapularSF: formData.value.subscapularSF,
+      supraspinaleSF: formData.value.supraspinaleSF,
+      calfSF: formData.value.calfSF
     },
     front_image: frontImage.value,
     right_image: rightImage.value
