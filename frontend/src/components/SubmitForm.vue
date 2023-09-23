@@ -1,39 +1,89 @@
 <template>
-  <form action="" class="form">
+  <form action="" class="form" @submit.prevent="createScan">
     <div class="flex">
       <div class="input-wrapper">
         <label for="name">Name</label>
-        <input name='name' id="name" type="text">
+        <input name='name' id="name" type="text" v-model="formData.name">
       </div>
       <div class="input-wrapper  px-4">
         <label for="age">Age</label>
-        <input name='age' id="age" type="number">
+        <input name='age' id="age" type="number" v-model="formData.age">
       </div>
+
     </div>
     <div class="flex">
       <div class="input-wrapper">
-        <label for="height">Height</label>
-        <input name='height' id="height" type="number">
+        <label for="height">Height(cm)</label>
+        <input name='height' id="height" type="number" v-model="formData.height">
       </div>
       <div class="input-wrapper px-4">
-        <label for="weight">Weight</label>
-        <input name='weight' id="weight" type="number">
+        <label for="weight">Weight(kg)</label>
+        <input name='weight' id="weight" type="number" v-model="formData.weight">
+      </div>
+      <div class="input-wrapper">
+        <label for="gender">Gender</label>
+        <select name='gender' id="gender" v-model="formData.gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
       </div>
     </div>
 
     <div class="input-wrapper">
       <label for="frontPhoto">Front Photo</label>
-      <input name='frontPhoto' id="frontPhoto" type="file">
+      <input name='frontPhoto' id="frontPhoto" type="file" @change="handleImageUpload('frontImage', $event)" accept="image/*">
     </div>
     <div class="input-wrapper">
       <label for="rightPhoto">Side Photo</label>
-      <input name='rightPhoto' id="rightPhoto" type="file">
+      <input name='rightPhoto' id="rightPhoto" type="file" @change="handleImageUpload('rightImage', $event)" accept="image/*">
     </div>
     <button type="submit" class="button">submit</button>
   </form>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue'
+import axios from 'axios';
+const formData = ref({
+  name: '',
+  height: 0,
+  weight: 0,
+  age: 0,
+  gender: '',
+})
+
+const frontImage = ref<File | null>(null)
+const rightImage = ref<File | null>(null)
+
+function handleImageUpload(fieldName: string, event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length) {
+    if (fieldName === 'frontImage') {
+      frontImage.value = target.files[0];
+    } else if (fieldName === 'rightImage') {
+      rightImage.value = target.files[0];
+    }
+  }
+}
+
+function createScan() {
+  const data = {
+    user: formData.value,
+    front_image: frontImage.value,
+    right_image: rightImage.value
+  }
+  console.log(data);
+
+  axios.post('/backendUrl/post_user_data', data)
+    .then((response) => {
+      console.log('Success:', response.data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+
 </script>
 
 <style scoped>
@@ -53,7 +103,7 @@
     }
 
   .input-wrapper>label {
-    min-width: 100px;
+    min-width: 50px;
   }
 
   .button {
