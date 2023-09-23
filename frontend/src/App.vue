@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import ResultCard from './components/ResultCard.vue'
 import { SearchResult } from './api/api'
-import mime from 'mime-types';
+import SubmitForm from './components/SubmitForm.vue';
 
 
 const backendUrl = import.meta.env.VITE_APP_BACKEND_URL as string
@@ -147,7 +147,7 @@ onMounted(() => {
 
 <template>
   <div :class="{'bg-gradient-to-tl from-blue-100 to-blue-100': !isDarkMode}" class="min-h-screen" :data-theme="isDarkMode ? 'dark' : 'fantasy'">
-    <div class="pb-6 pt-6 pr-6 relative flex flex-row-reverse flex-nowrap gap-5" >      
+    <div class="pb-6 pt-6 pr-6 relative flex flex-row-reverse flex-nowrap gap-5" >
         <div class="flex items-center">
     <input type="checkbox" class="toggle" checked @change="handleToggleChange"/>
   </div>
@@ -158,7 +158,7 @@ onMounted(() => {
       <button class="btn text-white" @click="openOverlay">Preview</button>
       <input type="file" class="file-input w-full max-w-xs" @change="handleFileChange" :disabled="isLoading"/>
     </div>
-  
+
     <div v-if="showOverlay" class="fixed inset-0 flex items-center justify-center z-50">
       <div class="overlay">
         <button class="overlay-close" @click="closeOverlay">&times;</button>
@@ -182,7 +182,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  
+
     <div class="flex flex-col items-center justify-center">
       <div class="py-2 px-3">
         <div class="input-group">
@@ -190,12 +190,14 @@ onMounted(() => {
         </div>
       </div>
     </div>
-  
+
     <div class="pt-20 px-20 grid grid-cols-3 gap-9  justify-items-center">
       <div v-for="(r, i) in results" :key="i">
         <ResultCard :result="r"/>
       </div>
     </div>
+
+    <SubmitForm />
   </div>
 </template>
 
@@ -238,7 +240,7 @@ onMounted(() => {
   min-width: 15vw; /* Set minimum width to 25% of the viewport width */
   min-height: 15vh; /* Set minimum height to 25% of the viewport height */
   border-radius: 4px;
-  overflow: auto; 
+  overflow: auto;
 }
 
 .btn {
