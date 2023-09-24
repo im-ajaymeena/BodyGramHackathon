@@ -66,15 +66,45 @@ class ResponseData(BaseModel):
     
 
 
+# @app.post('/post_user_data')
+# async def upload(userData: RequestData, 
+#                  front_image: UploadFile = File(...),
+#                  right_image: UploadFile = File(...),
+#                  ) -> ResponseData:
+
 @app.post('/post_user_data')
-async def upload(userData: RequestData = Depends(), 
-                 front_image: UploadFile = File(...),
-                 right_image: UploadFile = File(...),
-                 ) -> ResponseData:
+async def upload(name: str,
+                height: int,
+                weight: int,
+                age: int,
+                gender: str,
+                triceps_skinfold: int,
+                subscapular_skinfold: int,
+                supraspinale_skinfold: int,
+                front_image: UploadFile = File(...),
+                right_image: UploadFile = File(...),
+                 ):
+    
+
+    userData = RequestData(
+        name=name, 
+        height=height, 
+        weight=weight, 
+        age=age, 
+        gender=gender, 
+        triceps_skinfold=triceps_skinfold,
+        subscapular_skinfold=subscapular_skinfold,
+        supraspinale_skinfold=supraspinale_skinfold 
+        )
     
     front_image_base64 = base64.b64encode(front_image.file.read()).decode('utf-8')
     right_image_base64 = base64.b64encode(right_image.file.read()).decode('utf-8')
     
+
+    # front_image_base64 = "base64.b64encode(front_image.file.read()).decode('utf-8')"
+    # right_image_base64 = "base64.b64encode(right_image.file.read()).decode('utf-8')"
+    
+
     scanID = str(uuid.uuid4())
     headers = {
         "Authorization": API_KEY,
