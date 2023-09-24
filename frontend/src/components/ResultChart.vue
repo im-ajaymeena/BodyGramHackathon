@@ -9,7 +9,10 @@
 import { ref } from 'vue'
 import Chart from 'chart.js/auto'
 import { onMounted } from 'vue';
-import 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels'
+
+Chart.register(ChartDataLabels);
+
 
 const althelete = ref([
   {
@@ -57,7 +60,7 @@ onMounted(() => {
   const data = {
     datasets: [{
       label: 'You',
-      data: [plotResult(result)],
+      data: [{label: "You", x: plotResult(result).x, y: plotResult(result).y}],
       backgroundColor: 'rgb(255, 99, 132)'
     },
     {
@@ -88,20 +91,20 @@ onMounted(() => {
             min: -11, // Set the minimum value for the y-axis
             max: 16,  // Set the maximum value for the y-axis
           }
-        }
-      },
-      plugins: {
-        datalabels: {
-          align: 'end', // Position of the label relative to the point
-          anchor: 'end', // Anchor point of the label
-          font: {
-            weight: 'bold' // Label font weight
-          },
-          formatter: function (value, context) {
-            return context.dataset.data[context.dataIndex].label; // Display the label for each point
+        },
+        plugins: {
+          datalabels: {
+            align: 'right', // Position of the label relative to the point
+            anchor: 'start', // Anchor point of the label
+            font: {
+              weight: 'bold' // Label font weight
+            },
+            formatter: function (value, context) {
+              return context.dataset.data[context.dataIndex].label; // Display the label for each point
+            }
           }
         }
-      }
+      },
     }
   );
 })
