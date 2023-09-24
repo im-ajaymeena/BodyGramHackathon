@@ -1,74 +1,73 @@
 <template>
   <form action="" class="form" @submit.prevent="createScan">
-    <h1 class="font-bold">Input your data</h1>
-    <div class="grid grid-cols-3">
+    <h1 class="font-bold text-2xl mb-4">Input your data</h1>
+    <div class="grid grid-cols-3 gap-4">
       <div class="input-wrapper">
-        <label for="name">Name: </label>
-        <input name='name' id="name" type="text" v-model="formData.name">
-      </div>
-      <div class="input-wrapper  px-4">
-        <label for="age">Age: </label>
-        <input name='age' id="age" type="number" v-model="formData.age">
+        <label for="name" class="text-lg">Name:</label>
+        <input name="name" id="name" type="text" v-model="userData.name" class="input">
       </div>
       <div class="input-wrapper">
-        <label for="gender">Gender: </label>
-        <select name='gender' id="gender" v-model="formData.gender">
+        <label for="age" class="text-lg">Age:</label>
+        <input name="age" id="age" type="number" v-model="userData.age" class="input">
+      </div>
+      <div class="input-wrapper">
+        <label for="gender" class="text-lg">Gender:</label>
+        <select name="gender" id="gender" v-model="userData.gender" class="input">
           <option value="male">Male</option>
           <option value="female">Female</option>
         </select>
       </div>
     </div>
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-2 gap-4">
       <div class="input-wrapper">
-        <label for="height">Height(cm): </label>
-        <input name='height' id="height" type="number" v-model="formData.height">
+        <label for="height" class="text-lg">Height (cm):</label>
+        <input name="height" id="height" type="number" v-model="userData.height" class="input">
       </div>
-      <div class="input-wrapper px-4">
-        <label for="weight">Weight(kg): </label>
-        <input name='weight' id="weight" type="number" v-model="formData.weight">
+      <div class="input-wrapper">
+        <label for="weight" class="text-lg">Weight (kg):</label>
+        <input name="weight" id="weight" type="number" v-model="userData.weight" class="input">
       </div>
     </div>
-    <h1 class="font-semibold">Skinfold Measurement</h1>
-    <div class="grid grid-cols-3">
+    <h1 class="font-semibold text-2xl mt-6 mb-4">Skinfold Measurement</h1>
+    <div class="grid grid-cols-4 gap-4">
       <div class="input-wrapper">
-        <label for="height">Triceps: </label>
-        <input name='height' id="height" type="number" v-model="formData.tricepsSF">
+        <label for="tricepsSF" class="text-lg">Triceps(mm):</label>
+        <input name="tricepsSF" id="tricepsSF" type="number" v-model="userData.tricepsSF" class="input">
       </div>
-      <div class="input-wrapper px-4">
-        <label for="weight">Subscapular: </label>
-        <input name='weight' id="weight" type="number" v-model="formData.subscapularSF">
+      <div class="input-wrapper">
+        <label for="subscapularSF" class="text-lg">Subscapular(mm):</label>
+        <input name="subscapularSF" id="subscapularSF" type="number" v-model="userData.subscapularSF" class="input">
+      </div>
+      <div class="input-wrapper">
+        <label for="supraspinaleSF" class="text-lg">Supraspinale(mm):</label>
+        <input name="supraspinaleSF" id="supraspinaleSF" type="number" v-model="userData.supraspinaleSF" class="input">
+      </div>
+      <div class="input-wrapper">
+        <label for="calfSF" class="text-lg">Calf(mm):</label>
+        <input name="calfSF" id="calfSF" type="number" v-model="userData.calfSF" class="input">
       </div>
     </div>
-    <div class="grid grid-cols-3">
+    <div class="grid grid-cols-2 gap-4">
       <div class="input-wrapper">
-        <label for="height">Supraspinale: </label>
-        <input name='height' id="height" type="number" v-model="formData.supraspinaleSF">
+        <label for="frontPhoto" class="text-lg">Front Photo:</label>
+        <input name="frontPhoto" id="frontPhoto" type="file" @change="handleImageUpload('frontImage', $event)" class="file-input file-input-bordered w-full max-w-xs h-[48px]" accept="image/*">
       </div>
-      <div class="input-wrapper px-4">
-        <label for="weight">Calf?: </label>
-        <input name='weight' id="weight" type="number" v-model="formData.calfSF">
+      <div class="input-wrapper">
+        <label for="rightPhoto" class="text-lg">Side Photo:</label>
+        <input name="rightPhoto" id="rightPhoto" type="file" @change="handleImageUpload('rightImage', $event)" class="file-input file-input-bordered w-full max-w-xs h-[48px]" accept="image/*">
       </div>
     </div>
-    <div class="grid grid-cols-2">
-      <div class="input-wrapper">
-        <label for="frontPhoto">Front Photo: </label>
-        <input name='frontPhoto' id="frontPhoto" type="file" @change="handleImageUpload('frontImage', $event)"
-          accept="image/*">
-      </div>
-      <div class="input-wrapper">
-        <label for="rightPhoto">Side Photo: </label>
-        <input name='rightPhoto' id="rightPhoto" type="file" @change="handleImageUpload('rightImage', $event)"
-          accept="image/*">
-      </div>
-    </div>
-    <button type="submit" class="button">submit</button>
+    <button type="submit" class="btn bg-secondary">Submit</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 import axios from 'axios';
-const formData = ref({
+
+const backendUrl = 'http://localhost:8000';
+
+const userData = ref({
   name: '',
   height: 0,
   weight: 0,
@@ -78,10 +77,10 @@ const formData = ref({
   subscapularSF: 0,
   supraspinaleSF: 0,
   calfSF: 0
-})
+});
 
-const frontImage = ref<File | null>(null)
-const rightImage = ref<File | null>(null)
+const frontImage = ref<File | null>(null);
+const rightImage = ref<File | null>(null);
 
 function handleImageUpload(fieldName: string, event: Event) {
   const target = event.target as HTMLInputElement;
@@ -94,71 +93,66 @@ function handleImageUpload(fieldName: string, event: Event) {
   }
 }
 
-function createScan() {
-  const data = {
-    user: {
-      name: formData.value.name,
-      height: formData.value.height * 10,
-      weight: formData.value.weight * 1000,
-      age: formData.value.age,
-      gender: formData.value.gender,
-      tricepsSF: formData.value.tricepsSF,
-      subscapularSF: formData.value.subscapularSF,
-      supraspinaleSF: formData.value.supraspinaleSF,
-      calfSF: formData.value.calfSF
-    },
-    front_image: frontImage.value,
-    right_image: rightImage.value
+async function createScan() {
+  try {
+    const formDataToSend = new FormData();
+
+    formDataToSend.append('front_image', frontImage.value);
+    formDataToSend.append('right_image', rightImage.value);
+    formDataToSend.append('userData', JSON.stringify(userData.value));
+
+    const response = await axios.post(backendUrl + '/post_user_data', formDataToSend);
+    console.log('Success:', response.data);
+  } catch (error) {
+    console.error('Error:', error);
   }
-  console.log(data);
-
-  axios.post('/backendUrl/post_user_data', data)
-    .then((response) => {
-      console.log('Success:', response.data);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
 }
-
-
 </script>
 
 <style scoped>
 .form {
   width: 80%;
   margin: auto;
-  background-color: beige;
+  background-color: #fff;
   padding: 16px;
   border-radius: 8px;
-  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-input {
-  border-radius: 5px;
-  padding: 1px 2px;
+.input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
 }
 
-input:focus {
-  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.1);
+.input:focus {
+  border-color: #3490dc;
+  outline: none;
 }
 
 .input-wrapper {
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
-.input-wrapper>label {
-  min-width: 50px;
-  padding-right: 8px;
+.label {
+  font-size: 1.125rem;
+  font-weight: bold;
 }
 
 .button {
-  background-color: blue;
-  border-radius: 8px;
-  padding: 8px 16px;
+  background-color: #3490dc;
   color: white;
-  box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #2779bd;
 }
 </style>
