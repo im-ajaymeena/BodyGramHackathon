@@ -20,11 +20,11 @@
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="input-wrapper">
-        <label for="height" class="text-lg">Height (cm):</label>
+        <label for="height" class="text-lg">Height (mm):</label>
         <input name="height" id="height" type="number" v-model="userData.height" class="input">
       </div>
       <div class="input-wrapper">
-        <label for="weight" class="text-lg">Weight (kg):</label>
+        <label for="weight" class="text-lg">Weight (gram):</label>
         <input name="weight" id="weight" type="number" v-model="userData.weight" class="input">
       </div>
     </div>
@@ -32,20 +32,21 @@
     <div class="grid grid-cols-4 gap-4">
       <div class="input-wrapper">
         <label for="tricepsSF" class="text-lg">Triceps(mm):</label>
-        <input name="tricepsSF" id="tricepsSF" type="number" v-model="userData.tricepsSF" class="input">
+        <input name="tricepsSF" id="tricepsSF" type="number" v-model="userData.triceps_skinfold" class="input">
       </div>
       <div class="input-wrapper">
         <label for="subscapularSF" class="text-lg">Subscapular(mm):</label>
-        <input name="subscapularSF" id="subscapularSF" type="number" v-model="userData.subscapularSF" class="input">
+        <input name="subscapularSF" id="subscapularSF" type="number" v-model="userData.subscapular_skinfold" class="input">
       </div>
       <div class="input-wrapper">
         <label for="supraspinaleSF" class="text-lg">Supraspinale(mm):</label>
-        <input name="supraspinaleSF" id="supraspinaleSF" type="number" v-model="userData.supraspinaleSF" class="input">
+        <input name="supraspinaleSF" id="supraspinaleSF" type="number" v-model="userData.supraspinale_skinfold" class="input">
       </div>
-      <div class="input-wrapper">
+      <!-- we dont need cald for now -->
+      <!-- <div class="input-wrapper">
         <label for="calfSF" class="text-lg">Calf(mm):</label>
         <input name="calfSF" id="calfSF" type="number" v-model="userData.calfSF" class="input">
-      </div>
+      </div> -->
     </div>
     <div class="grid grid-cols-2 gap-4">
       <div class="input-wrapper">
@@ -73,10 +74,9 @@ const userData = ref({
   weight: 0,
   age: 0,
   gender: '',
-  tricepsSF: 0,
-  subscapularSF: 0,
-  supraspinaleSF: 0,
-  calfSF: 0
+  triceps_skinfold: 0,
+  subscapular_skinfold: 0,
+  supraspinale_skinfold: 0,
 });
 
 const frontImage = ref<File | null>(null);
@@ -91,6 +91,7 @@ function handleImageUpload(fieldName: string, event: Event) {
       rightImage.value = target.files[0];
     }
   }
+  console.log(fieldName, rightImage, frontImage, "handleImageUpload")
 }
 
 async function createScan() {
@@ -99,13 +100,37 @@ async function createScan() {
 
     formDataToSend.append('front_image', frontImage.value);
     formDataToSend.append('right_image', rightImage.value);
-    formDataToSend.append('userData', JSON.stringify(userData.value));
+    // formDataToSend.append('userData', JSON.stringify(userData.value));
 
-    const response = await axios.post(backendUrl + '/post_user_data', formDataToSend);
-    console.log('Success:', response.data);
-  } catch (error) {
-    console.error('Error:', error);
-  }
+
+    axios.post(
+        backendUrl + '/post_user_data', 
+        formDataToSend, 
+        {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            params: {
+                name: userData.value.name,
+                height: userData.value.height,
+                weight: userData.value.weight,
+                age: userData.value.age,
+                gender: userData.value.gender,
+                triceps_skinfold: userData.value.triceps_skinfold,
+                subscapular_skinfold: userData.value.subscapular_skinfold,
+                supraspinale_skinfold: userData.value.supraspinale_skinfold,
+            }
+        }
+    )
+    .then((res) => {
+        console.log(res)
+
+    }).catch(() => {
+        alert('Input Data is not valid')
+    })
+    } catch (error) {
+      console.error('Error:', error);
+    }
 }
 </script>
 
