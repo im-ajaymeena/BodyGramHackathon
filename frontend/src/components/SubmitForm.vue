@@ -62,8 +62,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import axios from 'axios';
+
+const emit = defineEmits();
 
 const backendUrl = 'http://localhost:8000';
 
@@ -103,6 +105,7 @@ async function createScan() {
 
     const response = await axios.post(backendUrl + '/post_user_data', formDataToSend);
     console.log('Success:', response.data);
+    emit('setResult', response.data);
   } catch (error) {
     console.error('Error:', error);
   }
