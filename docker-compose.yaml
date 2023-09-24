@@ -24,7 +24,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "8100:8000"
+      - "8000:8000"
     environment:
       - VUE_APP_URL=${VUE_APP_URL:-http://localhost:5173}
       - ROOT_PATH=${ROOT_PATH:-}
