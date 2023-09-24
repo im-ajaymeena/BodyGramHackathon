@@ -1,15 +1,21 @@
 <template>
-  
-  <div :class="{'bg-gradient-to-tl from-blue-100 to-blue-100': !isDarkMode}" class="min-h-screen" :data-theme="isDarkMode ? 'dark' : 'fantasy'"> 
+
+  <div :class="{'bg-gradient-to-tl from-blue-100 to-blue-100': !isDarkMode}" class="min-h-screen" :data-theme="isDarkMode ? 'dark' : 'fantasy'">
     <header class="bg-gradient-to-r from-green-400 to-blue-500 p-7 mb-20 text-white ">
       <div class="flex items-center"> <!-- Added a flex container for alignment -->
         <h1 class="text-5xl font-bold">ShapeShift</h1>
         <!-- <img src="./assets/logo.png" class="w-auto h-40 pr-4" alt="Logo" /> -->
       </div>
     </header>
-    
-    <SubmitForm />
-    <!-- <ResultChart /> -->
+
+    <SubmitForm @setResult="setResultData"/>
+    <div class="result-info">
+      <InfoBox :result="resultData"/>
+      <div class="flex result-info">
+        <ResultChart :result="resultData" @setCoordinates="setCoordinates"/>
+        <RecommendationBox :coordinates="coordinates"/>
+      </div>
+    </div>
     <footer class="bg-gray-800 text-white py-2 mt-20">
       <div class="container mx-auto flex justify-between items-center">
         <!-- Left-aligned contact information -->
@@ -25,7 +31,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Right-aligned "Sponsored by BodyGram" -->
         <div >
           <p class="text-left text-lg">Sponsored by: </p>
@@ -41,6 +47,57 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import SubmitForm from './components/SubmitForm.vue';
+import ResultChart from './components/ResultChart.vue';
+import RecommendationBox from './components/RecommendationBox.vue'
+import InfoBox from './components/InfoBox.vue';
+
+const coordinates = ref({})
+const resultData = ref({
+  "name": "ajay",
+  "height": 1720,
+  "weight": 66000,
+  "age": 26,
+  "gender": "male",
+  "skeletal_muscle_mass": 30906,
+  "body_fat_percentage": 16.863,
+  "mesomorphy": 3.74719999999999,
+  "endomorphy": 3.446762651422772,
+  "ectomorphy": 5.574793914125344,
+  "bmi": 0.02,
+  "reference_somatotype_data": [
+    {
+      "type": "Kayaking",
+      "mesomorphy": 3.82,
+      "endomorphy": 3.38,
+      "ectomorphy": 3.87
+    },
+    {
+      "type": "Basketball",
+      "mesomorphy": 4.09,
+      "endomorphy": 2.77,
+      "ectomorphy": 3
+    },
+    {
+      "type": "Boxing",
+      "mesomorphy": 3.7,
+      "endomorphy": 2.3,
+      "ectomorphy": 2.3
+    },
+    {
+      "type": "Football",
+      "mesomorphy": 3.57,
+      "endomorphy": 2.64,
+      "ectomorphy": 3
+    }
+  ]
+})
+
+function setResultData(data) {
+  resultData.value = data
+}
+function setCoordinates(data) {
+  coordinates.value = data
+}
 
 const isDarkMode = ref(false);
 
@@ -98,5 +155,8 @@ onMounted(() => {
   width: 100%;
 }
 
+.result-info>div {
+  margin: 4px
+}
 /* Add more styles as needed for your app */
 </style>
