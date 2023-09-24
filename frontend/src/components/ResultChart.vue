@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, emit } from 'vue'
+import { ref, defineProps, watch} from 'vue'
 import Chart from 'chart.js/auto'
 import { onMounted } from 'vue';
 import ChartDataLabels from 'chartjs-plugin-datalabels'
@@ -17,10 +17,12 @@ const props = defineProps({
   result: Object
 })
 
-const emits = defineEmits()
-
 Chart.register(ChartDataLabels);
 
+watch(props.result, (newValue, oldValue) => {
+  console.log('old value', oldValue);
+  console.log('new value', newValue);
+})
 
 const althelete = ref([
   {
@@ -49,15 +51,16 @@ const althelete = ref([
   }
 ])
 
+
+
 onMounted(() => {
+  console.log(props.result);
+  
   function plotResult(result) {
     const x = result['ectomorphy'] - result['endomorphy']
     const y = 2 * result['mesomorphy'] - (result['endomorphy'] + result['ectomorphy'])
-    console.log({ x, y });
     return { x, y }
   }
-
-  emits("setCoordinates", plotResult(props.result))
 
   const data = {
     datasets: [{
@@ -66,6 +69,7 @@ onMounted(() => {
       backgroundColor: 'rgb(255, 99, 132)'
     },
     {
+      label: "Althelete",
       data: althelete.value.map(item => ({
         label: item.type,
         x: plotResult(item).x,
@@ -75,8 +79,8 @@ onMounted(() => {
     }],
   };
 
-  console.log(data);
-  new Chart(
+  console.log(data); 
+  const myChart = new Chart(
     document.getElementById('somatograph'),
     {
       type: 'scatter',
@@ -109,6 +113,11 @@ onMounted(() => {
       },
     }
   );
+  setInterval(() => {
+    myChart.update();
+    console.log("chart updated")
+    console.log('data', props.result);
+  }, 1000)
 })
 </script>
 
@@ -118,8 +127,8 @@ onMounted(() => {
   background-position: top 5px right -15px;
   width: 750px;
   height: 750px;
-  background-image: url(https://i.stack.imgur.com/Y1mnB.png);
-  /* background-image: url(~@/assets/somatograph.png) */
+  /* background-image: url(https://i.stack.imgur.com/Y1mnB.png); */
+  background-image: url(../assets/somatograph.png);
 }
 
 .wrapper {

@@ -67,8 +67,8 @@
         <p class="px-2">{{ result.body_fat_percentage.toFixed(2) }}</p>
       </div>
       <div class="info-item">
-        <h3 class="px-2 font-semibold"> Skeletal muscle mass (unit?)</h3>
-        <p class="px-2">{{ result.skeletal_muscle_mass }}</p>
+        <h3 class="px-2 font-semibold"> Skeletal muscle mass (kg)</h3>
+        <p class="px-2">{{ result.skeletal_muscle_mass/1000 }}</p>
       </div>
     </div>
   </div>
@@ -77,8 +77,8 @@
 <script setup lang="ts">
 import {defineProps} from 'vue'
 
-const props = defineProps({
+const props = defineProps<({
   result: Object
-})
+})>()
 
 </script>

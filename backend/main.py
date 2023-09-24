@@ -6,6 +6,7 @@ import requests
 import uuid
 import base64
 import json
+import math
 
 from utils import somatotype_data_list, SomatotypeData
 from fastapi.middleware.cors import CORSMiddleware
@@ -189,8 +190,8 @@ CG: max calf grith (cm)
 SH, standing height (cm); 
 """
 def get_mesomorphy(user: RequestData, BODY_PARTS_VALUE):
-    HB = BODY_PARTS_VALUE['forearmGirthR'] /10
-    FB = BODY_PARTS_VALUE['kneeGirthR'] / 10
+    HB = ( BODY_PARTS_VALUE['forearmGirthR'] /10 ) / math.pi
+    FB = ( BODY_PARTS_VALUE['kneeGirthR'] / 10 ) / math.pi
     AG = BODY_PARTS_VALUE['upperArmGirthR'] / 10
     CG = BODY_PARTS_VALUE['calfGirthR'] / 10
     SH = user.height / 10

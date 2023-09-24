@@ -34,15 +34,23 @@ import {ref, defineProps, watch, onMounted} from 'vue'
 const diet = ref('')
 const exercise = ref('')
 
-const coordinates = defineProps({
-  coordinates: Object, // Define the type for the "result" prop
+const props = defineProps({
+  result: Object, // Define the type for the "result" prop
 })
 
 // watch(result, (newValue, oldValue) => {
 //   setRecommendation(newValue)
 // })
 onMounted(() => {
-  setRecommendation(coordinates.coordinates)
+  
+  function plotResult(result) {
+    const x = result['ectomorphy'] - result['endomorphy']
+    const y = 2 * result['mesomorphy'] - (result['endomorphy'] + result['ectomorphy'])
+    return { x, y }
+  }
+  const coordinates = plotResult(props.result)
+  console.log(coordinates);
+  setRecommendation(coordinates)
 })
 
 function setRecommendation(value) {

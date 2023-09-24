@@ -7,13 +7,23 @@
         <!-- <img src="./assets/logo.png" class="w-auto h-40 pr-4" alt="Logo" /> -->
       </div>
     </header>
+    <!-- when no result -->
+    <div v-if="!resultData">
+      <SubmitForm 
+        @setResult="setResultData" 
+        />
+    </div>
+      <!-- v-if="!resultData" -->
 
-    <SubmitForm @setResult="setResultData"/>
-    <div class="result-info">
-      <InfoBox :result="resultData"/>
-      <div class="flex result-info">
-        <ResultChart :result="resultData" @setCoordinates="setCoordinates"/>
-        <RecommendationBox :coordinates="coordinates"/>
+    <!-- when there is a result -->
+    <div class="result-info" v-if="resultData">
+      <InfoBox :result="resultData" />
+      <div class="flex result-info" >
+        <ResultChart :result="resultData"/>
+        <RecommendationBox :result="resultData"/>
+      </div>
+      <div class="text-end pt-5 pr-20">
+        <button @click="resetForm" class="btn btn-sm">Click to reset</button>
       </div>
     </div>
     <footer class="bg-gray-800 text-white py-2 mt-20">
@@ -31,7 +41,6 @@
             </div>
           </div>
         </div>
-
         <!-- Right-aligned "Sponsored by BodyGram" -->
         <div >
           <p class="text-left text-lg">Sponsored by: </p>
@@ -44,59 +53,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 import SubmitForm from './components/SubmitForm.vue';
 import ResultChart from './components/ResultChart.vue';
 import RecommendationBox from './components/RecommendationBox.vue'
 import InfoBox from './components/InfoBox.vue';
 
-const coordinates = ref({})
-const resultData = ref({
-  "name": "ajay",
-  "height": 1720,
-  "weight": 66000,
-  "age": 26,
-  "gender": "male",
-  "skeletal_muscle_mass": 30906,
-  "body_fat_percentage": 16.863,
-  "mesomorphy": 3.74719999999999,
-  "endomorphy": 3.446762651422772,
-  "ectomorphy": 5.574793914125344,
-  "bmi": 0.02,
-  "reference_somatotype_data": [
-    {
-      "type": "Kayaking",
-      "mesomorphy": 3.82,
-      "endomorphy": 3.38,
-      "ectomorphy": 3.87
-    },
-    {
-      "type": "Basketball",
-      "mesomorphy": 4.09,
-      "endomorphy": 2.77,
-      "ectomorphy": 3
-    },
-    {
-      "type": "Boxing",
-      "mesomorphy": 3.7,
-      "endomorphy": 2.3,
-      "ectomorphy": 2.3
-    },
-    {
-      "type": "Football",
-      "mesomorphy": 3.57,
-      "endomorphy": 2.64,
-      "ectomorphy": 3
-    }
-  ]
-})
+const resultData = ref(null)
 
 function setResultData(data) {
+  // resultData.value = data
+  console.log(data)
+  console.log('resultData:', resultData.value);
   resultData.value = data
+  console.log('resultData:', resultData.value);
 }
-function setCoordinates(data) {
-  coordinates.value = data
+
+// function plotResult(result) {
+//     const x = result['ectomorphy'] - result['endomorphy']
+//     const y = 2 * result['mesomorphy'] - (result['endomorphy'] + result['ectomorphy'])
+//     return { x, y }
+//   }
+
+function resetForm() {
+  resultData.value = null
 }
 
 const isDarkMode = ref(false);
@@ -104,6 +85,49 @@ const isDarkMode = ref(false);
 onMounted(() => {
   // You can add code here to toggle dark mode based on user preferences
 });
+
+// watch(resultData, (newResultData, oldResultData) => {
+//   coordinates.value = plotResult(newResultData)
+// });
+
+// {"name": "ajay",
+// "height": 1720,
+// "weight": 66000,
+// "age": 26,
+// "gender": "male",
+// "skeletal_muscle_mass": 30906,
+// "body_fat_percentage": 16.863,
+// "mesomorphy": 3.74719999999999,
+// "endomorphy": 3.446762651422772,
+// "ectomorphy": 5.574793914125344,
+// "bmi": 0.02,
+// "reference_somatotype_data": [
+//   {
+//     "type": "Kayaking",
+//     "mesomorphy": 3.82,
+//     "endomorphy": 3.38,
+//     "ectomorphy": 3.87
+//   },
+//   {
+//     "type": "Basketball",
+//     "mesomorphy": 4.09,
+//     "endomorphy": 2.77,
+//     "ectomorphy": 3
+//   },
+//   {
+//     "type": "Boxing",
+//     "mesomorphy": 3.7,
+//     "endomorphy": 2.3,
+//     "ectomorphy": 2.3
+//   },
+//   {
+//     "type": "Football",
+//     "mesomorphy": 3.57,
+//     "endomorphy": 2.64,
+//     "ectomorphy": 3
+//   }
+// ]}
+
 </script>
 
 <style scoped>
@@ -160,3 +184,5 @@ onMounted(() => {
 }
 /* Add more styles as needed for your app */
 </style>
+
+
